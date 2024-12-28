@@ -1,0 +1,55 @@
+{
+  "name": "jest-test-generator-extension",
+  "displayName": "jest-test-generator-extension",
+  "description": "VSCode extension to generate Jest tests for API endpoints from a Swagger file",
+  "publisher": "zahidgunay",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "generator-activitybar",
+          "title": "Jest Test Generator",
+          "icon": "images/test-tube.svg"
+        }
+      ]
+    },
+    "views": {
+      "generator-activitybar": [
+        {
+          "type": "webview",
+          "id": "jestGenerator.openview",
+          "name": "Generate",
+          "contextualTitle": "Generate"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.9",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.96.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.13.0"
+  },
+  "dependencies": {
+    "@readme/openapi-parser": "^2.6.0",
+    "ejs": "^3.1.10",
+    "fs-extra": "^11.2.0",
+    "vsce": "^2.15.0"
+  }
+}

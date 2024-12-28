@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jest Test Generator</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 10px;
+      }
+      pre {
+        background-color: #333;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        overflow: auto;
+      }
+      button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-top: 10px;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      #error-message {
+        color: red;
+        display: none;
+        margin-top: 15px;
+        padding: 10px;
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Jest Test Generator</h1>
+    <form id="generator-form">
+      <label for="swaggerPath">Swagger File Path:</label><br />
+      <input
+        type="text"
+        id="swaggerPath"
+        name="swaggerPath"
+        placeholder="/path/to/swagger.json"
+        required
+      /><br /><br />
+
+      <label for="endpoint">Endpoint:</label><br />
+      <input
+        type="text"
+        id="endpoint"
+        name="endpoint"
+        placeholder="/api/example"
+        required
+      /><br /><br />
+
+      <label for="method">HTTP Method:</label><br />
+      <select id="method" name="method">
+        <option value="GET">GET</option>
+        <option value="POST">POST</option>
+        <option value="PUT">PUT</option>
+        <option value="DELETE">DELETE</option></select
+      ><br /><br />
+
+      <button type="button" id="generate-button">Generate</button>
+    </form>
+
+    <h2>Generated Jest Test</h2>
+    <pre><code id="code-viewer" class="language-javascript"></code></pre>
+    <button id="copy-button">Copy to Clipboard</button><br />
+    <div id="error-message" style="color: red; display: none"></div>
+    <script>
+      const vscode = acquireVsCodeApi();
+
+      document
+        .getElementById("generate-button")
+        .addEventListener("click", () => {
+          const swaggerPath = document.getElementById("swaggerPath").value;
+          const endpoint = document.getElementById("endpoint").value;
+          const method = document.getElementById("method").value;
+
+          vscode.postMessage({
+            command: "generate",
+            swaggerPath,
+            endpoint,
+            method,
+          });
+        });
+
+      document.getElementById("copy-button").addEventListener("click", () => {
+        const code = document.getElementById("code-viewer").textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          alert("Code copied to clipboard!");
+        });
+      });
+
+      window.addEventListener("message", (event) => {
+        const message = event.data;
+        if (message.command === "display") {
+          const codeViewer = document.getElementById("code-viewer");
+          codeViewer.textContent = message.code;
+          hljs.highlightElement(codeViewer);
+        } else if (message.command === "error") {
+          const errorMessage = document.getElementById("error-message");
+          errorMessage.style.display = "block";
+          errorMessage.textContent = message.message;
+        }
+      });
+    </script>
+  </body>
+</html>

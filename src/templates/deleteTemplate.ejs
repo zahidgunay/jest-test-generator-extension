@@ -1,0 +1,10 @@
+describe('<%= endpoint %>', () => {
+    it('should return success for <%= method.toUpperCase() %> request', async () => {
+      const response = await request()
+        .delete(`<%= endpoint %>`)
+        .set('Cookie', `example-cookie`)
+        .expect(200)
+        .then(resp => JSON.parse(resp.text).data);
+        expect(response).toEqual('example-data');
+    });
+});
