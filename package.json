@@ -3,7 +3,7 @@
   "displayName": "jest-test-generator-extension",
   "description": "VSCode extension to generate Jest tests for API endpoints from a Swagger file",
   "publisher": "zahidgunay",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "engines": {
     "vscode": "^1.96.0"
   },

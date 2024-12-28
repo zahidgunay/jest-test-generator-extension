@@ -42,6 +42,10 @@
         border: 1px solid #f5c6cb;
         border-radius: 5px;
       }
+      #generated-test-container {
+        display: none;
+        margin-top: 20px;
+      }
     </style>
   </head>
   <body>
@@ -75,11 +79,12 @@
 
       <button type="button" id="generate-button">Generate</button>
     </form>
-
+    <div id="generated-test-container">
     <h2>Generated Jest Test</h2>
     <pre><code id="code-viewer" class="language-javascript"></code></pre>
+    </div>
     <button id="copy-button">Copy to Clipboard</button><br />
-    <div id="error-message" style="color: red; display: none"></div>
+    <div id="error-message"></div>
     <script>
       const vscode = acquireVsCodeApi();
 
@@ -107,12 +112,17 @@
 
       window.addEventListener("message", (event) => {
         const message = event.data;
+        const errorMessage = document.getElementById("error-message");
+        const generatedTestContainer = document.getElementById(
+          "generated-test-container"
+        );
         if (message.command === "display") {
           const codeViewer = document.getElementById("code-viewer");
+          errorMessage.style.display = "none";
+          generatedTestContainer.style.display = "block";
           codeViewer.textContent = message.code;
           hljs.highlightElement(codeViewer);
         } else if (message.command === "error") {
-          const errorMessage = document.getElementById("error-message");
           errorMessage.style.display = "block";
           errorMessage.textContent = message.message;
         }
